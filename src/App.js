@@ -1,24 +1,48 @@
-import logo from './logo.svg';
-import './App.css';
+// import "./App.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import Login from "./Pages/Login";
+import Dashboard from "./Pages/Dashboard";
+import React, { useState, useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useNavigate,
+} from "react-router-dom";
 
 function App() {
+  const [admin, setAdmin] = useState("");
+  const [dataRoleUserDetail, setDataRoleUserDetail] = useState([]);
+  const [menu, setMenu] = useState({});
+
+  const handleDataFromChild = (data) => {
+    setAdmin(data);
+  };
+  const handleRoleDetail = (data) => {
+    setDataRoleUserDetail(data);
+  };
+  const handleMenu = (data) => {
+    setMenu(data);
+  };
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <Login
+              onDataFromChild={handleDataFromChild}
+              dataMenu={handleMenu}
+              dataMenuLevel={handleRoleDetail}
+            />
+          }
+        />
+        <Route
+          path="/dashboard"
+          element={<Dashboard listmenu={menu} levelmenu={dataRoleUserDetail} />}
+        />
+      </Routes>
+    </Router>
   );
 }
 
