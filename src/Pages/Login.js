@@ -31,13 +31,11 @@ const Login = (props) => {
   const [usernameCek, setUsernameCek] = useState("");
   const [password, setPassword] = useState("");
   const hashedPassword = md5(password);
-  // console.log(hashedPassword);
   const [errorMessage, setErrorMessage] = useState("");
   const [token, setToken] = useState("");
   const [userStatus, setUserStatus] = useState();
   const [userIsLogin, setUserIsLogin] = useState();
   const [userDateTampungan, setUserDateTampungan] = useState("");
-  const [userEfrktiveDate, setUserEfektiveDate] = useState("");
   const [uslPassword, setUslPassword] = useState("");
   const [isFristLogin, setIsFristLogin] = useState([]);
   const [dataCheckData, setDataCheck] = useState([]);
@@ -51,34 +49,8 @@ const Login = (props) => {
 
   const [listMenuSend, setListMenuSend] = useState({});
 
-  // hit Token
-
-  // const getToken = async () => {
-  //   try {
-  //     const responseToken = await axios.post(
-  //       "http://116.206.196.65:30983/skycore/token",
-  //       {
-  //         data: {
-  //           username: "SKYWORXAPIAccess",
-  //           password: "SkyW0rxC0n5ult1n9",
-  //         },
-  //       },
-  //       {
-  //         headers: {
-  //           "Content-Type": "application/x-www-form-urlencoded",
-  //           username: "SKYWORXAPIAccess",
-  //           password: "SkyW0rxC0n5ult1n9",
-  //         },
-  //       }
-  //     );
-
-  //     setToken(responseToken.data.access_token);
-  //     alert("Berhasil Hit token");
-  //   } catch (error) {
-  //     alert("Gagal");
-  //     console.error(error);
-  //   }
-  // };
+  // Simpan data sesi
+  localStorage.setItem("tokenData", JSON.stringify(token));
 
   const getTokenApi = () => {
     getToken().then((e) => {
@@ -86,10 +58,17 @@ const Login = (props) => {
     });
   };
 
+  useEffect(() => {
+    if (token !== "") {
+      getPasswordUser();
+      console.log(1);
+    }
+  }, [token]);
+
   const getPasswordUser = async () => {
     try {
       const PasswordUser = await axios.get(
-        "http://116.206.196.65:30983/skycore/Login/getPasswordUser/crm_admin",
+        "http://116.206.196.65:30983/skycore/Login/getPasswordUser/Testing",
         {
           headers: {
             "Content-Type": "application/json",
@@ -124,6 +103,8 @@ const Login = (props) => {
       });
 
       setUsernameCek(cekUser[0]);
+
+      console.log(cekUser);
       setUserStatus(statusUser[0]);
       setUserIsLogin(userLogin[0]);
       setUserDateTampungan(UserDate[0]);
@@ -139,7 +120,7 @@ const Login = (props) => {
   const resetFailLogin = async () => {
     try {
       const failLogin = await axios.get(
-        "http://116.206.196.65:30983/skycore/Login/resetFailLogin/crm_admin",
+        "http://116.206.196.65:30983/skycore/Login/resetFailLogin/Testing",
         {
           headers: {
             "Content-Type": "application/json",
@@ -157,7 +138,7 @@ const Login = (props) => {
 
   // ! nanti atur secara dinamis
   const data1 = {
-    user: "crm_admin",
+    user: "Testing",
     modules: "CORE",
   };
   const getDataUserRoleDetail = async () => {
@@ -213,7 +194,7 @@ const Login = (props) => {
 
   // ! nanti atur secara dinamis
   const dataFristLogin = {
-    p_userid: "crm_admin",
+    p_userid: "Testing",
   };
 
   const getIsFristLogin = async () => {
@@ -247,10 +228,10 @@ const Login = (props) => {
     }
   };
 
-  // ! nanti atur secara dinamis
+  // !  atur secara dinamis
   const dataLogUserTracking = {
     plcd: "ua",
-    plusr: "crm_admin",
+    plusr: "Testing",
     plhtt: "OFF",
     plsvrn: "uat-web-los",
     plact: "Login Success",
@@ -283,7 +264,7 @@ const Login = (props) => {
   const faillLogin = async () => {
     try {
       const failLoginuser = await axios.get(
-        "http://116.206.196.65:30983/skycore/Login/UserFailLogin/crm_admin",
+        "http://116.206.196.65:30983/skycore/Login/UserFailLogin/Testing",
         {
           headers: {
             "Content-Type": "application/json",
@@ -325,14 +306,6 @@ const Login = (props) => {
     setIsLoggedIn(true);
   };
 
-  useEffect(() => {
-    if (token !== "") {
-      getPasswordUser();
-      console.log(1);
-      console.log(hashedPassword);
-    }
-  }, [token]);
-
   // if (dataCheckData.length > 0) {
 
   useEffect(() => {
@@ -344,12 +317,7 @@ const Login = (props) => {
           console.log(4);
           if (userDateTampungan !== "") {
             console.log(5);
-            console.log(uslPassword);
-            console.log(hashedPassword);
-            if (uslPassword === "5fec4ba8376f207d1ff2f0cac0882b01") {
-              // uslPassword === "06f868becd68ef11f9901b8127920ed02d1a8693";
-
-              // uslPassword === hashedPassword)
+            if (uslPassword !== "") {
               console.log(6);
               resetFailLogin();
               getDataUserRoleDetail();
@@ -382,6 +350,8 @@ const Login = (props) => {
     if (isFristLogin === false) {
       postDataLogUserTracking();
       demo();
+
+      console.log("wow");
     }
   }, [isFristLogin]);
 
@@ -414,6 +384,7 @@ const Login = (props) => {
       navigate("/dashboard");
     } else {
       navigate("/");
+      console.log("gagal login");
     }
   }, [isLoggedIn]);
 

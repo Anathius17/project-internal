@@ -21,7 +21,7 @@ export const getToken = async () => {
       }
     );
 
-    alert("Berhasil Hit token");
+    // alert("Berhasil Hit token");
 
     return apiToken.data.access_token;
   } catch (error) {

@@ -2,6 +2,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import Login from "./Pages/Login";
 import Dashboard from "./Pages/Dashboard";
+import Demo from "./Component/UserMenagement";
 import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
@@ -12,6 +13,7 @@ import {
 
 function App() {
   const [admin, setAdmin] = useState("");
+
   const [dataRoleUserDetail, setDataRoleUserDetail] = useState([]);
   const [menu, setMenu] = useState({});
 
@@ -41,6 +43,7 @@ function App() {
           path="/dashboard"
           element={<Dashboard listmenu={menu} levelmenu={dataRoleUserDetail} />}
         />
+        <Route path="/User" element={<Demo />} />
       </Routes>
     </Router>
   );
